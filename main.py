@@ -1,25 +1,25 @@
-from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI, Request
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
 
-@app.get("/")
-def read_root():
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
     """Root of the app, will serve the frontend that consumes the API"""
-    return {"200": "Welcome To Heroku"}
+    context = {
+        "title": "My Page",
+        "heading": "Welcome!",
+        "content": "This is my first FastAPI app!"
+    }
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "context": context}
+    )
 
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: str = None):
+    """Example endpoint"""
     return {"item_id": item_id, "q": q}
-
-
-@app.get("/fizz_buzz/{num}")
-def read_item(num: int):
-    # https: // ja.wikipedia.org / wiki / Fizz_Buzz
-    if not num % 15:
-        return {num: "Fizz Buzz"}
-    elif not num % 5 or not num % 3:
-        return {num: 'Fizz' if not num % 3 else 'Buzz'}
-    else:
-        return {num: 'Stay Silent'}
