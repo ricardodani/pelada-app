@@ -10,7 +10,7 @@ templates = Jinja2Templates(directory="templates")
 async def root(request: Request):
     """Root of the app, will serve the frontend that consumes the API"""
     context = {
-        "title": "My Page",
+        "title": "Pelada App!",
         "heading": "Welcome!",
         "content": "This is my first FastAPI app!"
     }
