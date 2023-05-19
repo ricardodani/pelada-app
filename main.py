@@ -1,13 +1,15 @@
+import os
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 
+current_path = os.getcwd()
 
 app = FastAPI()
 app.mount(
     "/static",
-    StaticFiles(directory="frontend-app/dist/frontend-app"),
+    StaticFiles(directory=f"{current_path}/frontend-app/dist/frontend-app"),
     name="static",
 )
 templates = Jinja2Templates(directory="templates")
