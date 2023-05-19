@@ -1,19 +1,22 @@
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+
 
 app = FastAPI()
+app.mount(
+    "/static",
+    StaticFiles(directory="frontend-app/dist/frontend-app"),
+    name="static",
+)
 templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     """Root of the app, will serve the frontend that consumes the API"""
-    context = {
-        "title": "Pelada App!",
-        "heading": "Welcome!",
-        "content": "This is my first FastAPI app!"
-    }
+    context = {}
     return templates.TemplateResponse(
         "index.html", {"request": request, "context": context}
     )
